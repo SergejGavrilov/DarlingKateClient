@@ -141,7 +141,9 @@ public class MapsActivity extends Activity
             Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
             dialog.show();
         } else {
-            Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
+
+             Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
+
         }
         return false;
     }
@@ -170,6 +172,7 @@ public class MapsActivity extends Activity
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
         mGoogleMap.moveCamera(update);
     }
+
 
 
     @Override
@@ -227,3 +230,4 @@ public class MapsActivity extends Activity
 
 
 }
+
