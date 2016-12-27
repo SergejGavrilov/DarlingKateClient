@@ -203,7 +203,7 @@ public class MapsActivity extends Activity
 
         double lattitude = address.getLatitude();
         double longitude = address.getLongitude();
-        goToLocationZoom(lattitude, longitude, 16);
+        goToLocationZoom(lattitude, longitude,  16);
     }
 
 
