@@ -46,14 +46,16 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
             Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
             dialog.show();
         } else {
-            Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
+
+             Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
+
         }
         return false;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        
+
         mGoogleMap = googleMap;
         goToLocation(29, -70);
     }
@@ -69,4 +71,6 @@ public class MapsActivity extends Activity implements OnMapReadyCallback {
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
         mGoogleMap.moveCamera(update);
     }
+
+
 }
