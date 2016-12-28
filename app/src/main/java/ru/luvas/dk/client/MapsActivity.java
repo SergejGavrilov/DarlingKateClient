@@ -221,10 +221,37 @@ public class MapsActivity extends Activity
         recognizer.startListening();
     }
 
-    public void handleInput(String text) throws IOException {
 
-        mEditText.setText(text);
-        geoLocate(text);
+    public boolean onOptionsItemSelectedVoice(String option) {
+        switch (option) {
+            case "нет":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+                return true;
+
+            case "нормальная":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                return true;
+            case "спутник":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                return true;
+            case "ландшафт":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                return true;
+            case "гибрид":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+
+    public void handleInput(String text) throws IOException {
+        if (!onOptionsItemSelectedVoice(text)) {
+            mEditText.setText(text);
+            geoLocate(text);
+        }
 
     }
 

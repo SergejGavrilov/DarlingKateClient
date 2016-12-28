@@ -84,8 +84,7 @@ public class TheOnlyActivity extends AppCompatActivity
 
         setDisplayState("Нажми и скажи что-нибудь (;");
 
-        Button mButton = (Button) findViewById(R.id.buttonMap);
-        mButton.setOnClickListener(mClick);
+
 
     }
 
