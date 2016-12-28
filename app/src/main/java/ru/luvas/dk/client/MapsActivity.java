@@ -4,8 +4,10 @@ import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 //import com.google.android.gms.identity.intents.Address;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,13 +75,6 @@ public class MapsActivity extends Activity
         recognizer = new Recognizer(this);
         bListen = (Button) findViewById(R.id.buttonListen);
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
 
         mEditText = (EditText) findViewById(R.id.editText);
 
@@ -117,12 +113,12 @@ public class MapsActivity extends Activity
     }
 
     protected void onStart() {
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
         super.onStart();
     }
 
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        //  mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -142,7 +138,7 @@ public class MapsActivity extends Activity
             dialog.show();
         } else {
 
-             Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Невозможно  подключится к  Play Servecies", Toast.LENGTH_LONG).show();
 
         }
         return false;
@@ -152,7 +148,31 @@ public class MapsActivity extends Activity
     public void onMapReady(GoogleMap googleMap) {
 
         mGoogleMap = googleMap;
-        goToLocation(29, -70);
+        //goToLocation(29, -70);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+        }
+        mGoogleMap.setMyLocationEnabled(true);
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
     }
 
     private void goToLocation(double lattitude, double longitude) {
@@ -174,11 +194,13 @@ public class MapsActivity extends Activity
     }
 
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
+    LocationRequest mLocationRequest;
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -187,7 +209,13 @@ public class MapsActivity extends Activity
         if (mLastLocation != null) {
             mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+
         }*/
+       /* mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);*/
     }
 
     @Override
@@ -206,7 +234,7 @@ public class MapsActivity extends Activity
 
         double lattitude = address.getLatitude();
         double longitude = address.getLongitude();
-        goToLocationZoom(lattitude, longitude,  16);
+        goToLocationZoom(lattitude, longitude, 16);
     }
 
 
